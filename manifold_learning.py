@@ -1,4 +1,8 @@
 #!/usr/bin/python
+#A class of unsupervised estimators that seeks to describe datasets as
+#low-dimensional manifolds embedded in high-dimensional spaces.
+#Good when nonlinear relationships within the data
+
 
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()
@@ -45,19 +49,19 @@ X2 = rotate(X, 20) + 5
 #plt.axis('equal');
 
 
-
+#Distance matrix
 from sklearn.metrics import pairwise_distances
 D = pairwise_distances(X)
 print "D.shape:",D.shape
 
-#plt.imshow(D, zorder=2, cmap='Blues', interpolation='nearest')
-#plt.colorbar();
+plt.imshow(D, zorder=2, cmap='Blues', interpolation='nearest')
+plt.colorbar();
 
 D2 = pairwise_distances(X2)
 print "np.allclose(D, D2):",np.allclose(D, D2)
 
 
-
+#From Distance Matrix to original data
 from sklearn.manifold import MDS
 model = MDS(n_components=3, dissimilarity='precomputed', random_state=1)
 out = model.fit_transform(D)
@@ -101,7 +105,7 @@ from mpl_toolkits import mplot3d
 #ax = plt.axes(projection='3d')
 #ax.scatter3D(XS[:, 0], XS[:, 1], XS[:, 2],**colorize);
 
-
+#Elimina una componente de los datos manteniendo la distancia entre los puntos
 from sklearn.manifold import MDS
 model = MDS(n_components=2, random_state=2)
 outS = model.fit_transform(XS)
@@ -109,7 +113,8 @@ outS = model.fit_transform(XS)
 #plt.axis('equal');
 
 
-
+#Cuando los datos estan afectados no linealmente
+#Primar el mantener las distancias a corto alcance
 from sklearn.manifold import LocallyLinearEmbedding
 model = LocallyLinearEmbedding(n_neighbors=100, n_components=2, method='modified',
                                eigen_solver='dense')
@@ -129,11 +134,12 @@ fig, ax = plt.subplots(4, 8, subplot_kw=dict(xticks=[], yticks=[]))
 for i, axi in enumerate(ax.flat):
     axi.imshow(faces.images[i], cmap='gray')
 
-#from sklearn.decomposition import RandomizedPCA
-#model = RandomizedPCA(100).fit(faces.data)
-#plt.plot(np.cumsum(model.explained_variance_ratio_))
-#plt.xlabel('n components')
-#plt.ylabel('cumulative variance');
+#Cuantas componentes necesarias para explicar cuanto
+from sklearn.decomposition import RandomizedPCA
+model = RandomizedPCA(100).fit(faces.data)
+plt.plot(np.cumsum(model.explained_variance_ratio_))
+plt.xlabel('n components')
+plt.ylabel('cumulative variance');
 
 plt.show()
 
