@@ -117,8 +117,10 @@ SELECT * FROM Persons WHERE FirstName LIKE '%a'
 SELECT * FROM Persons WHERE FirstName LIKE '%la%'
 
 /*The IN operator may be used if you know the exact value you want to return for at least one of the columns.*/
+/*El contenido de IN puede ser una nested querry*/
 SELECT column_name(s) FROM table_name WHERE column_name IN (value1, value2, ...)
 SELECT *              FROM Persons    WHERE LastName    IN ('Hansen','Pettersen')
+SELECT title FROM songs WHERE artist IN (SELECT name FROM artists WHERE genre='Pop')
 /*Select data from a table with sort the rows.*/
 SELECT column_name(s) FROM table_name ORDER BY row_1, row_2 DESC, row_3 ASC, ...	      
 SELECT * FROM Persons ORDER BY LastName
